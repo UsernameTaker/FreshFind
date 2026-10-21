@@ -1,0 +1,8 @@
+node_modules/
+dist/
+target/
+backend/data/
+.env
+.env.local
+.DS_Store
+.idea/

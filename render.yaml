@@ -1,0 +1,30 @@
+# Render Blueprint: New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: robofinder-api
+    runtime: docker
+    plan: free
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL        # jdbc:postgresql://<neon-host>/<db>?sslmode=require
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CRON_TOKEN
+        generateValue: true
+      - key: FRONTEND_ORIGIN     # e.g. https://robofinder.pages.dev
+        sync: false
+      - key: ADMIN_EMAILS        # your email, so your account becomes admin
+        sync: false
+      - key: SEED_DEMO
+        value: "false"
+      - key: TBA_API_KEY
+        sync: false
+      - key: BRAVE_API_KEY
+        sync: false

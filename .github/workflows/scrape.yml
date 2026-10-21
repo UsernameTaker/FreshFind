@@ -1,0 +1,28 @@
+# Runs the website scraper once a day by calling the backend (and refreshes the team lists on Sundays).
+# Free hosts sleep when idle, so this also wakes the server up first.
+# Repo settings -> Secrets and variables -> Actions:
+#   BACKEND_URL  e.g. https://robofinder-api.onrender.com
+#   CRON_TOKEN   same value as the backend's CRON_TOKEN env var
+name: Nightly website scrape
+on:
+  schedule:
+    - cron: "17 8 * * *"   # 08:17 UTC daily
+  workflow_dispatch: {}
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wake the server
+        run: |
+          for i in 1 2 3 4 5 6; do
+            if curl -fsS --max-time 60 "${{ secrets.BACKEND_URL }}/api/health"; then exit 0; fi
+            echo "waiting for server..."; sleep 20
+          done
+          exit 1
+      - name: Start scrape batch (Sundays - re-import the team lists first)
+        run: |
+          job=scrape
+          if [ "$(date -u +%u)" = "7" ]; then job=import; fi
+          curl -fsS -X POST --max-time 60 \
+            -H "X-Cron-Token: ${{ secrets.CRON_TOKEN }}" \
+            "${{ secrets.BACKEND_URL }}/api/cron/$job"
