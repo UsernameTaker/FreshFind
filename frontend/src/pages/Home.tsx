@@ -127,7 +127,7 @@ export default function Home() {
           <div className="how">
             <div className="card"><h3>Students</h3><p>Search by ZIP code (and grade if you want), compare teams, then apply here or visit the team's website.</p></div>
             <div className="card"><h3>Teams</h3><p>Create a free profile, build an application with your own questions and word limits, and review applicants.</p></div>
-            <div className="card"><h3>Teams not on RoboFinder yet</h3><p>They're still listed from public FIRST team lists, with a link to their website when they have one.</p></div>
+            <div className="card"><h3>Teams not on FreshFind yet</h3><p>They're still listed from public FIRST team lists, with a link to their website when they have one.</p></div>
           </div>
         )}
       </section>

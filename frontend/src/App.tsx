@@ -51,7 +51,7 @@ export default function App() {
         </Routes>
       </main>
       <footer className="footer container">
-        RoboFinder · Free for students and teams · Listings for teams that haven't joined yet link to their own websites.
+        FreshFind · Free for students and teams · Listings for teams that haven't joined yet link to their own websites.
       </footer>
     </>
   );

@@ -1,7 +1,7 @@
 # Runs the website scraper once a day by calling the backend (and refreshes the team lists on Sundays).
 # Free hosts sleep when idle, so this also wakes the server up first.
 # Repo settings -> Secrets and variables -> Actions:
-#   BACKEND_URL  e.g. https://robofinder-api.onrender.com
+#   BACKEND_URL  e.g. https://freshfind-api.onrender.com
 #   CRON_TOKEN   same value as the backend's CRON_TOKEN env var
 name: Nightly website scrape
 on:

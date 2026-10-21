@@ -1,7 +1,7 @@
 # Render Blueprint: New -> Blueprint -> pick this repo.
 services:
   - type: web
-    name: robofinder-api
+    name: freshfind-api
     runtime: docker
     plan: free
     rootDir: backend
@@ -18,7 +18,7 @@ services:
         generateValue: true
       - key: CRON_TOKEN
         generateValue: true
-      - key: FRONTEND_ORIGIN     # e.g. https://robofinder.pages.dev
+      - key: FRONTEND_ORIGIN     # e.g. https://freshfind.pages.dev
         sync: false
       - key: ADMIN_EMAILS        # your email, so your account becomes admin
         sync: false

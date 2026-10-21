@@ -1,8 +1,8 @@
-# RoboFinder
+# FreshFind
 
 A free website that helps kids find robotics teams near them — community teams first, school teams too — and apply in one place.
 
-- **Students** search by ZIP (grade optional; filter by program, team type, distance, "taking applications"), view team pages, and either apply right on RoboFinder or jump to the team's own website / join page. Student accounts can save drafts and track status.
+- **Students** search by ZIP (grade optional; filter by program, team type, distance, "taking applications"), view team pages, and either apply right on FreshFind or jump to the team's own website / join page. Student accounts can save drafts and track status.
 - **Teams** create a profile, then build their own application: pick eligible grades, add as many questions as they want (paragraph, short answer, multiple choice) with optional word limits, set a deadline, open/close it, and review applicants (accept / waitlist / decline, private notes, CSV export).
 - **Teams that haven't signed up** are still listed: on first start the server imports every active US FTC team from [FTCScout](https://ftcscout.org) (no key needed) and, with a free key, every FRC team from The Blue Alliance. A scraper visits their website, pulls a description, finds a "join / apply / recruit" link and a contact email, so the listing points students to the right place. Teams can **claim** their listing (an admin approves).
 
@@ -18,6 +18,8 @@ backend/    Spring Boot 3 + Java 21      → Docker container (Render free tier)
 ## Run it locally
 
 Requirements: Java 21, Maven 3.9+, Node 20+.
+
+Optional: copy `backend/.env.example` to `backend/.env` and put your free The Blue Alliance key in it (`TBA_API_KEY=...`) to also import FRC teams. `.env` is gitignored, so the key never ends up on GitHub; on Render, set it as an environment variable instead.
 
 ```bash
 # 1. API (http://localhost:8080) — uses a local H2 database in backend/data/, loads demo data on first run
@@ -61,7 +63,7 @@ Everything below has a free tier with no credit card needed (as of October 2026 
 3. Set environment variables:
    - `DATABASE_URL`, `DB_USER`, `DB_PASSWORD` — from Neon
    - `JWT_SECRET` — any random string of 32+ characters (Blueprint generates one)
-   - `FRONTEND_ORIGIN` — your website URL, e.g. `https://robofinder.pages.dev` (comma-separate several)
+   - `FRONTEND_ORIGIN` — your website URL, e.g. `https://freshfind.pages.dev` (comma-separate several)
    - `ADMIN_EMAILS` — your email; register with it to become admin
    - `CRON_TOKEN` — random string (Blueprint generates one)
    - `SEED_DEMO=false`
@@ -98,7 +100,7 @@ CSV columns (header row required): `name, teamNumber, type, programs, schoolName
 
 Re-running an import updates existing rows (matched by team number) and **never overwrites a team that has claimed its listing**.
 
-### How the scraper works (`backend/src/main/java/org/robofinder/scrape`)
+### How the scraper works (`backend/src/main/java/org/freshfind/scrape`)
 1. *(optional, needs `BRAVE_API_KEY`)* For unclaimed teams **without** a website, search the web. A result is only accepted if it clearly matches (team number + "robot", or most words of the team name) and isn't a directory/social site. These links are labeled "found automatically" until the team confirms them; if one keeps failing it's dropped.
 2. For teams **with** a website: respect `robots.txt`, fetch the homepage with an identifying user agent, and save the title, description, a "join / apply / recruit / tryout / sign up" link (Google Forms etc. score higher) and a `mailto:` contact.
 3. Works in batches (`SCRAPER_BATCH_SIZE`, default 100) every `SCRAPER_INTERVAL_MINUTES` (5) while the server is awake, checking `SCRAPER_THREADS` (6) different sites at a time with a pause between requests; sites are rechecked every `SCRAPER_RECHECK_DAYS` (14).
